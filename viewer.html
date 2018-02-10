@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <title>E100</title>
+        <script src="three.js"></script>
+        <script src="OrbitControls.js"></script>
+        <style>
+			body {
+				background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#cbccc8)) fixed;
+				color: #999;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+            canvas { width: 100%; height: 100% }
+        </style>
+    </head>
+    <body>
+        <!-- Div which will hold the Output -->
+        <div id="WebGL-output"></div>
+        <script>
+            /*var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            var ambientLight = new THREE.AmbientLight( 0x555555 );
+            scene.add( ambientLight );
+
+            var lights = [];
+            lights[0] = new THREE.DirectionalLight( 0xffffff, 0.5 );
+            lights[1] = new THREE.DirectionalLight( 0xffffff, 0.5 );
+            lights[2] = new THREE.DirectionalLight( 0xffffff, 1 );
+            
+            lights[0].position.set( -100, 200, 100 );
+            lights[1].position.set( 100, 200, 100 );
+            lights[2].position.set( -100, -200, -100 );
+
+            scene.add( lights[0] );
+            scene.add( lights[1] );
+            scene.add( lights[2] );
+
+
+            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+            var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            // load ascii model
+            var jsonLoader = new THREE.JSONLoader();
+            jsonLoader.load( "260.js", createScene );
+
+            function createScene( geometry, material ) {
+                console.log('createScene')
+                    var mesh = new THREE.Mesh( geometry, material );
+                    scene.add(mesh)
+            }*/
+                // once everything is loaded, we run our Three.js stuff.
+            function init() {
+
+                // create a scene, that will hold all our elements such as objects, cameras and lights.
+                var scene = new THREE.Scene();
+                // create a camera, which defines where we're looking at.
+                var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                // create a control
+                var controls = new THREE.OrbitControls( camera );
+                controls.enablePan = false;
+                controls.maxPolarAngle = Math.PI/2; 
+
+
+                // create a render and set the size
+                var renderer = new THREE.WebGLRenderer({ alpha: true });
+                //renderer.setClearColor( 0xffffff, 1 );
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.shadowMap.enabled = true;
+				
+                // create the ground plane
+                var planeGeometry = new THREE.PlaneGeometry(10, 10, 1, 1);
+                var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+				var materialRoad = new THREE.MeshPhongMaterial( { color: 0x222222, ambient: 0x222222, specular: 0x222222, perPixel: true } );
+                
+                var plane = new THREE.Mesh(planeGeometry, materialRoad);
+                plane.receiveShadow = true;
+                // rotate and position the plane
+                plane.rotation.x = -0.5 * Math.PI;
+                plane.position.x = 0;
+                plane.position.y = 0;
+                plane.position.z = 0;
+                // add the plane to the scene
+                //scene.add(plane);
+
+
+                var plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
+                plane2.receiveShadow = true;
+                // rotate and position the plane
+                plane2.rotation.y = Math.PI;
+
+
+                plane2.position.x = 0;
+                plane2.position.y = 5;
+                plane2.position.z = 5;
+                // add the plane to the scene
+                //scene.add(plane2);
+
+                // position and point the camera to the center of the scene
+                camera.position.set( 0, 5, -15 );
+                
+                controls.update();
+
+                // add subtle ambient lighting
+                var ambiColor = "#0c0c0c";
+                var ambientLight = new THREE.AmbientLight( 0x555555 );
+				scene.add( ambientLight );
+                // add spotlight for the shadows
+                var lights = [];
+				lights[0] = new THREE.PointLight( 0xffffff, 1, 0 );
+				lights[1] = new THREE.PointLight( 0xffffff, 1, 0 );
+				lights[2] = new THREE.PointLight( 0xffffff, 1, 0 );
+				
+				lights[0].position.set( 0, 200, 0 );
+				lights[1].position.set( 100, 200, 100 );
+				lights[2].position.set( -100, -200, -100 );
+
+				scene.add( lights[0] );
+
+                var objLoader = new THREE.JSONLoader();
+                objLoader.load( "E100/hull.json", createScene );
+				objLoader.load( "E100/turret.json", createScene );
+				objLoader.load( "E100/tracks.json", createScene );
+				objLoader.load( "E100/gun.json", createScene );
+
+                function createScene( geometry, material ) {
+                        var mesh = new THREE.Mesh( geometry, material );
+                        scene.add(mesh)
+                }
+
+                // add the output of the renderer to the html element
+                document.getElementById("WebGL-output").appendChild(renderer.domElement);
+                render();
+                function render() {
+                    // rotate the cube around its axes
+                    // bounce the sphere up and down
+                    //step += controls.bouncingSpeed;
+                    // render using requestAnimationFrame
+                    requestAnimationFrame(render);
+                    controls.update();
+                    renderer.render(scene, camera);
+                    window.scene = scene;
+                    window.camera = camera;
+                    window.THREE = THREE;
+                    window.controls = controls;
+
+                }
+
+            }
+            window.onload = init
+
+
+        </script>
+    </body>
+</html>
