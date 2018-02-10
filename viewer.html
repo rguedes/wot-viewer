@@ -28,6 +28,14 @@
 				bottom: 0;
 				right: 0;
 			}
+			footer {
+				position: fixed;
+				bottom: 0;
+				font-weight: bold;
+				padding: 5px;
+				width: 100%;
+				text-align: center;
+			}
 			#WebGL-output {
 				z-index: 1;
 			}
@@ -37,6 +45,7 @@
         <!-- Div which will hold the Output -->
 		<div class="ads"></div>
         <div id="WebGL-output"></div>
+		<footer>Created by ptCode to DailyBounce</footer>
         <script>
             /*var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -118,9 +127,9 @@
 				//scene.add( cylinderCy );
 
 				//planeMaterial.map.needsUpdate = true; //ADDED
-				/*var texture = new THREE.TextureLoader();
-				texture = texture.load("ads.png")
-				planeMaterial= new THREE.MeshBasicMaterial({map:texture, color: 0xffffff});*/
+				var texture = new THREE.TextureLoader();
+				texture = texture.load("dailybounce.png")
+				planeMaterial= new THREE.MeshBasicMaterial({map:texture, color: 0xffffff});
 				
 				
 				var planeGeometry = new THREE.PlaneGeometry(10, 5, 1, 1);
