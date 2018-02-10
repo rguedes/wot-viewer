@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>E100</title>
+        <title>705A</title>
         <script src="three.js"></script>
         <script src="OrbitControls.js"></script>
         <style>
@@ -74,35 +74,51 @@
                 renderer.shadowMap.enabled = true;
 				
                 // create the ground plane
-                var planeGeometry = new THREE.PlaneGeometry(10, 10, 1, 1);
                 var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 				var materialRoad = new THREE.MeshPhongMaterial( { color: 0x222222, ambient: 0x222222, specular: 0x222222, perPixel: true } );
                 
+						
+				var planeGeometry = new THREE.PlaneGeometry(20, 25, 1, 1);
                 var plane = new THREE.Mesh(planeGeometry, materialRoad);
                 plane.receiveShadow = true;
                 // rotate and position the plane
                 plane.rotation.x = -0.5 * Math.PI;
                 plane.position.x = 0;
                 plane.position.y = 0;
-                plane.position.z = 0;
+                plane.position.z = 7.5;
                 // add the plane to the scene
-                //scene.add(plane);
+                scene.add(plane);
+				
+				
+				//Billboard
+				var geometryCy = new THREE.CylinderGeometry( 0.5, 0.5, 5, 32 );
+				var cylinderCy = new THREE.Mesh( geometryCy, materialRoad );
+				cylinderCy.position.x = 0; //Horizontal
+                cylinderCy.position.y = 2.5; //Vertical
+                cylinderCy.position.z = 15.6; //Profundidade
+				scene.add( cylinderCy );
 
-
+				//planeMaterial.map.needsUpdate = true; //ADDED
+				/*var texture = new THREE.TextureLoader();
+				texture = texture.load("ads.png")
+				planeMaterial= new THREE.MeshBasicMaterial({map:texture, color: 0xffffff});*/
+				
+				
+				var planeGeometry = new THREE.PlaneGeometry(10, 5, 1, 1);
                 var plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-                plane2.receiveShadow = true;
+                //plane2.receiveShadow = true;
                 // rotate and position the plane
                 plane2.rotation.y = Math.PI;
 
 
-                plane2.position.x = 0;
-                plane2.position.y = 5;
-                plane2.position.z = 5;
+                plane2.position.x = 0; //Horizontal
+                plane2.position.y = 5; //Vertical
+                plane2.position.z = 15; //Profundidade
                 // add the plane to the scene
-                //scene.add(plane2);
+                scene.add(plane2);
 
                 // position and point the camera to the center of the scene
-                camera.position.set( 0, 5, -15 );
+                camera.position.set( 0, 3, -15 );
                 
                 controls.update();
 
@@ -121,12 +137,15 @@
 				lights[2].position.set( -100, -200, -100 );
 
 				scene.add( lights[0] );
+				scene.add( lights[1] );
+				scene.add( lights[2] );
 
                 var objLoader = new THREE.JSONLoader();
-                objLoader.load( "E100/hull.json", createScene );
-				objLoader.load( "E100/turret.json", createScene );
-				objLoader.load( "E100/tracks.json", createScene );
-				objLoader.load( "E100/gun.json", createScene );
+				var tank = "705A"
+                objLoader.load( tank+"/hull.json", createScene );
+				objLoader.load( tank+"/turret.json", createScene );
+				objLoader.load( tank+"/tracks.json", createScene );
+				objLoader.load( tank+"/gun.json", createScene );
 
                 function createScene( geometry, material ) {
                         var mesh = new THREE.Mesh( geometry, material );
